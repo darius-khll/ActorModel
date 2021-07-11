@@ -25,8 +25,8 @@ namespace Actor.Client
                     try
                     {
                         //await ATM(client);
-                        count = await GetClientWork(client);
-                        //await SendSms(client);
+                        // count = await GetClientWork(client);
+                        await SendSms(client);
                     }
                     catch (Exception e)
                     {

@@ -24,25 +24,28 @@ namespace Actor
                 //localDev
                 //.UseLocalhostClustering()
 
+                //IMPORTANT
+                //https://github.com/dotnet/orleans/blob/ba30bbb2155168fc4b9f190727220583b9a7ae4c/src/OrleansSQLUtils/CreateOrleansTables_SqlServer.sql
                 //persistant for clustering
                 .UseAdoNetClustering(options =>
                 {
                     options.ConnectionString = "Integrated Security=true;Initial Catalog=Orleans1;Server=.";
                     options.Invariant = "System.Data.SqlClient";
                 })
-                .ConfigureEndpoints(siloPort: 11111, gatewayPort: 30000)
+                .ConfigureEndpoints(siloPort: 11212, gatewayPort: 30212)
 
                 //transaction
                 .AddMemoryGrainStorageAsDefault()
                 .UseTransactions()
 
                 //storage
-                .AddAdoNetGrainStorage("profileStore", options =>
-                {
-                    //Some query should be executed in order to handler associated tables and records to be stored in the db
-                    options.ConnectionString = "Integrated Security=true;Initial Catalog=Orleans1;Server=.";
-                    options.UseJsonFormat = true;
-                })
+                //.AddAdoNetGrainStorage("profileStore", options =>
+                //{
+                //    //IMPORTANT
+                //    //Some query should be executed in order to handler associated tables and records to be stored in the db
+                //    options.ConnectionString = "Integrated Security=true;Initial Catalog=Orleans1;Server=.";
+                //    options.UseJsonFormat = true;
+                //})
 
                 //Streaming
                 .AddSimpleMessageStreamProvider("SMSProvider", (options) => options.OptimizeForImmutableData = false)
