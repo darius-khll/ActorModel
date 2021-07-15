@@ -79,6 +79,7 @@ namespace Actor.Contract
 
         public Task<TransitStatus> GetStatus()
         {
+            Console.WriteLine($"Version: {Version}");
             return Task.FromResult(State.Status);
         }
 

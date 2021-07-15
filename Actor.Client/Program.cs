@@ -27,7 +27,8 @@ namespace Actor.Client
                     {
                         //await ATM(client);
                         // count = await GetClientWork(client);
-                        await SendSms(client, i);
+                        //await SendSms(client, i);
+                        await SendEventSourcing(client, i);
                     }
                     catch (Exception e)
                     {
@@ -106,7 +107,7 @@ namespace Actor.Client
 
         private static async Task SendSms(IClusterClient client, int i)
         {
-            Console.WriteLine("Enter to send more sms:");
+            Console.WriteLine($"{i} - please enter to send more sms:");
             Console.ReadKey();
 
             var guid = Guid.Parse("ef0874b9-4696-4493-bb83-4b184865b957");
@@ -116,6 +117,22 @@ namespace Actor.Client
             var stream = streamProvider.GetStream<int>(guid, "RANDOMDATA");
 
             await stream.OnNextAsync(i);
+        }
+
+        private static async Task SendEventSourcing(IClusterClient client, int i)
+        {
+            Console.WriteLine($"{i} - please enter to send more sms:");
+            Console.ReadKey();
+
+            var guid = Guid.Parse("ef0874b9-4696-4493-bb83-4b184865b958");
+
+            var gen = client.GetGrain<IShipment>(guid);
+
+            await gen.Pickup();
+            Console.WriteLine(await gen.GetStatus());
+
+            await gen.Deliver();
+            Console.WriteLine(await gen.GetStatus());
         }
     }
 }
