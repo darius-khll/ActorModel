@@ -22,9 +22,12 @@ namespace Actor.Contract
 
             await stream.SubscribeAsync<int>(async (data, token) =>
             {
-                await Task.Delay(2000);
                 Console.WriteLine("Data was recieved: " + data);
             });
+
+            //var a = await stream.GetAllSubscriptionHandles();
+            //Console.WriteLine($"count = {a.Count} - Name = {a[0].StreamIdentity.Guid}");
+            //await a[0].UnsubscribeAsync();
 
             await base.OnActivateAsync();
         }

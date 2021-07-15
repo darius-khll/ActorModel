@@ -48,7 +48,11 @@ namespace Actor
                 //})
 
                 //Streaming
-                .AddSimpleMessageStreamProvider("SMSProvider", (options) => options.OptimizeForImmutableData = false)
+                .AddSimpleMessageStreamProvider("SMSProvider", (options) =>
+                {
+                    options.FireAndForgetDelivery = true;
+                })
+
                 .AddMemoryGrainStorage("PubSubStore")
 
                 .Configure<ClusterOptions>(options =>

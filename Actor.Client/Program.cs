@@ -18,15 +18,16 @@ namespace Actor.Client
         {
             int count = -1;
 
-            for (int i = 0; i <= 100; i++)
+            using (var client = await ConnectClient())
             {
-                using (var client = await ConnectClient())
+                for (int i = 0; i <= 5; i++)
                 {
+
                     try
                     {
                         //await ATM(client);
                         // count = await GetClientWork(client);
-                        await SendSms(client);
+                        await SendSms(client, i);
                     }
                     catch (Exception e)
                     {
@@ -54,7 +55,11 @@ namespace Actor.Client
                 })
 
                 //Streaming
-                .AddSimpleMessageStreamProvider("SMSProvider")
+                .AddSimpleMessageStreamProvider("SMSProvider", (options) =>
+                {
+                    options.FireAndForgetDelivery = true;
+                })
+
 
                 .Configure<ClusterOptions>(options =>
                 {
@@ -92,22 +97,21 @@ namespace Actor.Client
                 Console.WriteLine(fromBalance);
                 Console.WriteLine(toBalance);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
             }
         }
 
-        private static async Task SendSms(IClusterClient client)
+        private static async Task SendSms(IClusterClient client, int i)
         {
             var guid = Guid.Parse("ef0874b9-4696-4493-bb83-4b184865b957");
 
             var streamProvider = client.GetStreamProvider("SMSProvider");
-            
+
             var stream = streamProvider.GetStream<int>(guid, "RANDOMDATA");
 
-            await stream.OnNextAsync(new Random().Next(100));
+            await stream.OnNextAsync(i);
         }
-
     }
 }
