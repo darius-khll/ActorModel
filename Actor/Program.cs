@@ -32,7 +32,7 @@ namespace Actor
                     options.ConnectionString = "Integrated Security=true;Initial Catalog=Orleans1;Server=.";
                     options.Invariant = "System.Data.SqlClient";
                 })
-                .ConfigureEndpoints(siloPort: 11212, gatewayPort: 30212)
+                .ConfigureEndpoints(siloPort: 11213, gatewayPort: 30213)
 
                 //transaction
                 .AddMemoryGrainStorageAsDefault()

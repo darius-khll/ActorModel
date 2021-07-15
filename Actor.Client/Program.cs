@@ -48,6 +48,7 @@ namespace Actor.Client
                 //.UseLocalhostClustering()
 
                 //Clustering
+                //https://github.com/dotnet/orleans/blob/ba30bbb2155168fc4b9f190727220583b9a7ae4c/src/OrleansSQLUtils/CreateOrleansTables_SqlServer.sql
                 .UseAdoNetClustering(options =>
                 {
                     options.ConnectionString = "Integrated Security=true;Initial Catalog=Orleans1;Server=.";
@@ -64,7 +65,7 @@ namespace Actor.Client
                 .Configure<ClusterOptions>(options =>
                 {
                     options.ClusterId = "dev";
-                    options.ServiceId = "OrleansBasics";
+                    options.ServiceId = "OrleansBasics1";
                 })
                 .Build();
 
@@ -105,6 +106,9 @@ namespace Actor.Client
 
         private static async Task SendSms(IClusterClient client, int i)
         {
+            Console.WriteLine("Enter to send more sms:");
+            Console.ReadKey();
+
             var guid = Guid.Parse("ef0874b9-4696-4493-bb83-4b184865b957");
 
             var streamProvider = client.GetStreamProvider("SMSProvider");
