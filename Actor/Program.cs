@@ -48,12 +48,20 @@ namespace Actor
                 //    options.UseJsonFormat = true;
                 //})
 
+                
                 //Streaming
                 .AddSimpleMessageStreamProvider("SMSProvider", (options) =>
                 {
                     options.FireAndForgetDelivery = true;
                 })
-                .AddMemoryGrainStorage("PubSubStore")
+                //.AddMemoryGrainStorage("PubSubStore")
+                .AddAdoNetGrainStorage("PubSubStore", optionsBuilder =>
+                {
+                    optionsBuilder.ConnectionString = "Integrated Security=true;Initial Catalog=Orleans1;Server=.";
+                    optionsBuilder.Invariant = "System.Data.SqlClient";
+                    optionsBuilder.UseJsonFormat = true;
+                })
+
 
                 .Configure<ClusterOptions>(options =>
                 {

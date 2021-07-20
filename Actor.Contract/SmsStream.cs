@@ -14,6 +14,8 @@ namespace Actor.Contract
     {
         public override async Task OnActivateAsync()
         {
+            Console.WriteLine("sms grain is activated!");
+
             var guid = this.GetPrimaryKey();
 
             var streamProvider = GetStreamProvider("SMSProvider");
