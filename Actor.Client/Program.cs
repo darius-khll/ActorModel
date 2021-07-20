@@ -27,8 +27,8 @@ namespace Actor.Client
                     {
                         //await ATM(client);
                         // count = await GetClientWork(client);
-                        //await SendSms(client, i);
-                        await SendEventSourcing(client, i);
+                        await SendSms(client, i);
+                        //await SendEventSourcing(client, i);
                     }
                     catch (Exception e)
                     {
@@ -110,7 +110,7 @@ namespace Actor.Client
             Console.WriteLine($"{i} - please enter to send more sms:");
             Console.ReadKey();
 
-            var guid = Guid.Parse("ef0874b9-4696-4493-bb83-4b184865b957");
+            var guid = Guid.NewGuid();
 
             var streamProvider = client.GetStreamProvider("SMSProvider");
 

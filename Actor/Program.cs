@@ -26,6 +26,7 @@ namespace Actor
 
                 //IMPORTANT
                 //https://github.com/dotnet/orleans/blob/ba30bbb2155168fc4b9f190727220583b9a7ae4c/src/OrleansSQLUtils/CreateOrleansTables_SqlServer.sql
+                //https://dotnet.github.io/orleans/docs/host/configuration_guide/adonet_configuration.html
                 //persistant for clustering
                 .UseAdoNetClustering(options =>
                 {
@@ -52,7 +53,6 @@ namespace Actor
                 {
                     options.FireAndForgetDelivery = true;
                 })
-
                 .AddMemoryGrainStorage("PubSubStore")
 
                 .Configure<ClusterOptions>(options =>
