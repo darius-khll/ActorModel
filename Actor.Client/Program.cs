@@ -20,7 +20,7 @@ namespace Actor.Client
 
             using (var client = await ConnectClient())
             {
-                for (int i = 0; i <= 5; i++)
+                for (int i = 0; i <= 500; i++)
                 {
 
                     try

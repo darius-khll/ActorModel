@@ -20,6 +20,9 @@ namespace Actor
 
         private static async Task<ISiloHost> StartSilo()
         {
+            var sP = new Random().Next(11113, 19299);
+            var gP = new Random().Next(30213, 39213);
+
             var builder = new SiloHostBuilder()
                 //localDev
                 //.UseLocalhostClustering()
@@ -33,7 +36,7 @@ namespace Actor
                     options.ConnectionString = "Integrated Security=true;Initial Catalog=Orleans1;Server=.";
                     options.Invariant = "System.Data.SqlClient";
                 })
-                .ConfigureEndpoints(siloPort: 11213, gatewayPort: 30213)
+                .ConfigureEndpoints(siloPort: sP, gatewayPort: gP)
 
                 //transaction
                 .AddMemoryGrainStorageAsDefault()
