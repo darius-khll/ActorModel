@@ -55,7 +55,7 @@ namespace Actor
                     options.FireAndForgetDelivery = true;
                 })
                 //.AddMemoryGrainStorage("PubSubStore")
-                .AddAdoNetGrainStorage("PubSubStore", optionsBuilder =>
+                .AddAdoNetGrainStorage("PubSubStore", optionsBuilder => //It MUST be "PubSubStore"
                 {
                     optionsBuilder.ConnectionString = "Integrated Security=true;Initial Catalog=Orleans1;Server=.";
                     optionsBuilder.Invariant = "System.Data.SqlClient";
