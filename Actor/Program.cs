@@ -2,6 +2,7 @@
 using Orleans;
 using Orleans.Configuration;
 using Orleans.Hosting;
+using Orleans.Providers.Streams.AzureQueue;
 using System;
 using System.Threading.Tasks;
 
@@ -51,12 +52,18 @@ namespace Actor
                 //    options.UseJsonFormat = true;
                 //})
 
-                
+
                 //Streaming
-                .AddSimpleMessageStreamProvider("SMSProvider", (options) =>
-                {
-                    options.FireAndForgetDelivery = true;
-                })
+                //.AddSimpleMessageStreamProvider("SMSProvider", (options) =>
+                //{
+                //    options.FireAndForgetDelivery = true;
+                //})
+                //docker run -p 10000:10000 mcr.microsoft.com/azure-storage/azurite azurite-queue --queueHost 0.0.0.0 --queuePort 8888
+                .AddAzureQueueStreams("AzureQueueProvider",
+                        optionsBuilder =>
+                        {
+                            optionsBuilder.Configure(options => { options.ConnectionString = "https://127.0.0.1:8888/devstoreaccount1/queue-name"; });
+                        })
                 //.AddMemoryGrainStorage("PubSubStore")
                 .AddAdoNetGrainStorage("PubSubStore", optionsBuilder => //It MUST be "PubSubStore"
                 {
