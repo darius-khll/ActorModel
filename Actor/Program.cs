@@ -4,6 +4,7 @@ using Orleans.Configuration;
 using Orleans.Hosting;
 using Orleans.Providers.Streams.AzureQueue;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Actor
@@ -54,16 +55,29 @@ namespace Actor
 
 
                 //Streaming
-                .AddSimpleMessageStreamProvider("SMSProvider", (options) =>
-                {
-                    options.FireAndForgetDelivery = true;
-                })
+                //Fire and forget should be configured in client instead
+                //.AddSimpleMessageStreamProvider("SMSProvider", (options) =>
+                //{
+                //    options.FireAndForgetDelivery = true;
+                //})
                 //docker run -p 8888:8888 mcr.microsoft.com/azure-storage/azurite azurite-queue --queueHost 0.0.0.0 --queuePort 8888
-                //.AddAzureQueueStreams("AzureQueueProvider",
-                //        optionsBuilder =>
-                //        {
-                //            optionsBuilder.Configure(options => { options.ConnectionString = "https://127.0.0.1:8888/devstoreaccount1/queue-name"; });
-                //        })
+                .AddAzureQueueStreams("AzureQueueProvider", optionsBuilder =>
+                {
+                    //optionsBuilder.ConfigurePullingAgent(ob => ob.Configure(options => {
+                    //    options.GetQueueMsgsTimerPeriod = TimeSpan.FromSeconds(1);
+                    //}));
+
+                    optionsBuilder.ConfigureAzureQueue(ob =>
+                    {
+                        ob.Configure(options =>
+                        {
+                            //find connection string on azure storage explorer
+                            options.ConnectionString = "AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;DefaultEndpointsProtocol=http;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;QueueEndpoint=http://127.0.0.1:8888/devstoreaccount1;TableEndpoint=http://127.0.0.1:10002/devstoreaccount1;";
+                            options.QueueNames = new List<string> { "" +
+                                    "orleansbasic1-azurequeueprovider-0"};
+                        });
+                    });
+                })
                 //.AddMemoryGrainStorage("PubSubStore")
                 .AddAdoNetGrainStorage("PubSubStore", optionsBuilder => //It MUST be "PubSubStore"
                 {

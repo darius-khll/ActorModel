@@ -3,6 +3,7 @@ using Orleans;
 using Orleans.Configuration;
 using Orleans.Hosting;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Actor.Client
@@ -56,11 +57,24 @@ namespace Actor.Client
                     options.Invariant = "System.Data.SqlClient";
                 })
 
+
+
                 //Streaming
-                .AddSimpleMessageStreamProvider("SMSProvider", (options) =>
+                //Fire and forget should be configured in client
+                //.AddSimpleMessageStreamProvider("SMSProvider", (options) =>
+                //{
+                //    options.FireAndForgetDelivery = true;
+                //})
+                .AddAzureQueueStreams("AzureQueueProvider", optionsBuilder =>
                 {
-                    options.FireAndForgetDelivery = true;
+                    optionsBuilder.Configure(options =>
+                    {
+                        options.ConnectionString = "AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;DefaultEndpointsProtocol=http;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;QueueEndpoint=http://127.0.0.1:8888/devstoreaccount1;TableEndpoint=http://127.0.0.1:10002/devstoreaccount1;";
+                        options.QueueNames = new List<string> {
+                            "orleansbasic1-azurequeueprovider-0" };
+                    });
                 })
+
 
 
                 .Configure<ClusterOptions>(options =>
@@ -112,7 +126,7 @@ namespace Actor.Client
 
             var guid = Guid.NewGuid();
 
-            var streamProvider = client.GetStreamProvider("SMSProvider");
+            var streamProvider = client.GetStreamProvider("AzureQueueProvider");
 
             var stream = streamProvider.GetStream<int>(guid, "RANDOMDATA");
 

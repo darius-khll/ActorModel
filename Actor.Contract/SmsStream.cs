@@ -18,7 +18,7 @@ namespace Actor.Contract
 
             var guid = this.GetPrimaryKey();
 
-            var streamProvider = GetStreamProvider("SMSProvider");
+            var streamProvider = GetStreamProvider("AzureQueueProvider");
 
             var stream = streamProvider.GetStream<int>(guid, "RANDOMDATA");
 
