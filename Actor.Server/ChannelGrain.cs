@@ -10,9 +10,9 @@ public class ChannelGrain : Grain, IChannelGrain
 
     public override Task OnActivateAsync(CancellationToken cancellationToken)
     {
-        var streamProvider = this.GetStreamProvider("chat");
+        var streamProvider = this.GetStreamProvider(OrleansConstants.StreamProvider);
 
-        _stream = streamProvider.GetStream<ChatMsg>("ChatRoom", this.GetPrimaryKeyString());
+        _stream = streamProvider.GetStream<ChatMsg>(OrleansConstants.Stream, this.GetPrimaryKeyString());
 
         return base.OnActivateAsync(cancellationToken);
     }

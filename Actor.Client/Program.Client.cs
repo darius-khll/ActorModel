@@ -1,13 +1,15 @@
-﻿using Actor.Common;
+﻿using Actor.Client;
+using Actor.Common;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Orleans.Runtime;
 using Spectre.Console;
 
 using var host = new HostBuilder()
     .UseOrleansClient(clientBuilder =>
     {
         clientBuilder.UseLocalhostClustering()
-            .AddMemoryStreams("chat");
+            .AddMemoryStreams(OrleansConstants.StreamProvider);
     })
     .Build();
 
@@ -15,8 +17,15 @@ var client = host.Services.GetRequiredService<IClusterClient>();
 
 await StartAsync(host);
 
-var room = client.GetGrain<IChannelGrain>("1");
+var streamId = StreamId.Create(OrleansConstants.Stream, OrleansConstants.Channel);
+var stream =
+    client
+        .GetStreamProvider(OrleansConstants.StreamProvider)
+        .GetStream<ChatMsg>(streamId);
+await stream.SubscribeAsync(new StreamObserver(OrleansConstants.Channel));
 
+
+var room = client.GetGrain<IChannelGrain>(OrleansConstants.Channel);
 do
 {
     await room.Join("wow");

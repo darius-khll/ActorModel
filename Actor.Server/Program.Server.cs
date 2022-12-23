@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Actor.Common;
+using Microsoft.Extensions.Hosting;
 
 await Host.CreateDefaultBuilder(args)
     .UseOrleans(siloBuilder =>
@@ -6,6 +7,6 @@ await Host.CreateDefaultBuilder(args)
         siloBuilder
             .UseLocalhostClustering()
             .AddMemoryGrainStorage("PubSubStore")
-            .AddMemoryStreams("chat");
+            .AddMemoryStreams(OrleansConstants.StreamProvider);
     })
     .RunConsoleAsync();

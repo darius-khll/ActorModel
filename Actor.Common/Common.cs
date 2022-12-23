@@ -18,3 +18,11 @@ public interface IChannelGrain : IGrainWithStringKey
 {
     Task<StreamId> Join(string nickname);
 }
+
+
+public static class OrleansConstants
+{
+    public const string StreamProvider = "chat";
+    public const string Stream = "ChatRoom";
+    public const string Channel = "1";
+}

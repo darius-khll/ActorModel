@@ -1,6 +1,5 @@
 ﻿using Actor.Common;
 using Orleans.Streams;
-using Spectre.Console;
 
 namespace Actor.Client;
 
@@ -14,17 +13,38 @@ public sealed class StreamObserver : IAsyncObserver<ChatMsg>
 
     public Task OnErrorAsync(Exception ex)
     {
-        AnsiConsole.WriteException(ex);
-
+        Console.WriteLine("err");
         return Task.CompletedTask;
     }
 
     public Task OnNextAsync(ChatMsg item, StreamSequenceToken? token = null)
     {
-        AnsiConsole.MarkupLine(
-            "[[[dim]{0}[/]]][[{1}]] [bold yellow]{2}:[/] {3}",
-            item.Created.LocalDateTime, _roomName, item.Author, item.Text);
+        Console.WriteLine("Message recieved");
 
         return Task.CompletedTask;
     }
 }
+
+//public interface IMessagingGrain : IGrainWithIntegerKey
+//{
+//}
+
+//[ImplicitStreamSubscription("MessagingGrain")]
+//public class MessagingGrain : Grain, IMessagingGrain
+//{
+//    public override async Task OnActivateAsync(CancellationToken cancellationToken)
+//    {
+//        var guid = this.GetPrimaryKey();
+
+//        var streamProvider = this.GetStreamProvider("SMSProvider");
+
+//        var stream = streamProvider.GetStream<ChatMsg>("MessagingGrain", guid);
+
+//        await stream.SubscribeAsync(async (data, token) =>
+//        {
+//            await Console.Out.WriteLineAsync($"Message: {data.Author}");
+//        });
+
+//        await base.OnActivateAsync(cancellationToken);
+//    }
+//}
