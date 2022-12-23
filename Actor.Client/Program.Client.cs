@@ -1,8 +1,6 @@
-﻿using Actor.Client;
-using Actor.Common;
+﻿using Actor.Common;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Orleans.Runtime;
 using Spectre.Console;
 
 using var host = new HostBuilder()
@@ -28,10 +26,6 @@ do
 static Task StartAsync(IHost host) =>
     AnsiConsole.Status().StartAsync("Connecting to server", async ctx =>
     {
-        ctx.Spinner(Spinner.Known.Dots);
-        ctx.Status = "Connecting...";
-
         await host.StartAsync();
-
         ctx.Status = "Connected!";
     });

@@ -12,11 +12,7 @@ public class ChannelGrain : Grain, IChannelGrain
     {
         var streamProvider = this.GetStreamProvider("chat");
 
-        var streamId = StreamId.Create(
-            "ChatRoom", this.GetPrimaryKeyString());
-
-        _stream = streamProvider.GetStream<ChatMsg>(
-            streamId);
+        _stream = streamProvider.GetStream<ChatMsg>("ChatRoom", this.GetPrimaryKeyString());
 
         return base.OnActivateAsync(cancellationToken);
     }
